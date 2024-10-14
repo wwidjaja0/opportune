@@ -8,7 +8,7 @@ enabled=1
 node_dirs='backend frontend'
 
 # Command used to run a lint check.
-check_command='npm run lint-check'
+check_command='npm run lint'
 
 # Command used to autofix lint errors.
 fix_command='npm run lint-fix'
