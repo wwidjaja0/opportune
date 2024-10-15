@@ -207,6 +207,6 @@ Please follow these coding style guidelines:
 
 Please write a rough description for the changes made in each commits
 
-## Contanct
+## Contact
 
-Contact Kevin Sun (kgsun@ucsd.edu) or UC San Diego CSES (cses@ucsd.edu) for any issues or questions.
+For any issues or questions, please contact Kevin Sun (kgsun@ucsd.edu) or UC San Diego CSES (cses@ucsd.edu).
