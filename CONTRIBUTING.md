@@ -88,10 +88,10 @@ By participating in this project, you agree to uphold the [Code of Conduct](CODE
    ```
    The output should be something like the following:
    ```bash
-   [your-username]    https://github.com/[your-username]/InternshipTracking.git (fetch)
-   [your-username]    https://github.com/[your-username]/InternshipTracking.git (push)
-   origin  https://github.com/CSES-Open-Source/InternshipTracking.git (fetch)
-   origin  https://github.com/CSES-Open-Source/InternshipTracking.git (push)
+   [your-username]    https://github.com/[your-username]/Opportune.git (fetch)
+   [your-username]    https://github.com/[your-username]/Opportune.git (push)
+   origin  https://github.com/CSES-Open-Source/Opportune.git (fetch)
+   origin  https://github.com/CSES-Open-Source/Opportune.git (push)
    ```
 
 ### Installing Dependencies
@@ -153,10 +153,60 @@ By participating in this project, you agree to uphold the [Code of Conduct](CODE
 
 ### Reporting Bugs
 
-1.
+1. Open the [CSES Opensource Opportune Github Repo](https://github.com/CSES-Open-Source/Opportune/).
+2. Click on the **issues** tab (next to code).
+3. Create a **new issue**.
+4. Select **Bug report** as the type of issue.
+5. Fill in the title and description and submit the issue.
 
 ### Suggesting Features
+
+1. Open the [CSES Opensource Opportune Github Repo](https://github.com/CSES-Open-Source/Opportune/).
+2. Click on the **issues** tab (next to code).
+3. Create a **new issue**.
+4. Select **Feature request** as the type of issue.
+5. Fill in the title and description and submit the issue.
 
 ### Improving Documentation
 
 ### Submitting a Pull Request
+
+1. Create a new branch for the current issue you are working on:
+   ```bash
+   git checkout -b origin/main [name-of-branch]
+   ```
+2. Make changes to the branch and **commit changes**. I would recomment using VSCode version control or GitHub Desktop for making commits.
+3. Run lint in respective frontend and backend directories:
+   ```bash
+   npm run lint-check
+   ```
+   Make sure to fix all lint errors before pushing your code.
+4. **Push** the commits to your forked repository:
+   ```bash
+   git push [your-username] HEAD
+   ```
+   `[your-username]` is whatever you chose to set the name of your remote repository as. To check this type:
+   ```bash
+   git remote -v
+   ```
+5. Go to your forked repository and make a **pull request** to the main branch of the original repository. Make sure to fill in the title and description of the pull request.
+
+## Development Guidlines
+
+### Code Style
+
+Please follow these coding style guidelines:
+
+- We recommend using Prettier to format on save, and then running ESLint before making a pull request.
+- Indent with tabs and use a 2-space indentation.
+- Use semicolons and the end of each line.
+- Write clear, concise comments where necessary.
+- Use meaningful variable and function names.
+
+### Commit Messages
+
+Please write a rough description for the changes made in each commits
+
+## Contact
+
+For any issues or questions, please contact Kevin Sun (kgsun@ucsd.edu) or UC San Diego CSES (cses@ucsd.edu).
