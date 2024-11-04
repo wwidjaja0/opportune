@@ -33,7 +33,7 @@ const validateIsAlumni = body("isAlumni")
   .isBoolean()
   .withMessage("isAlumni must be a boolean");
 
-export const createUserValidator = () => [
+export const createUserValidator = [
   validateId,
   validateEmail,
   validateFirstName,
@@ -41,7 +41,7 @@ export const createUserValidator = () => [
   validateIsAlumni,
 ];
 
-export const updateUserValidator = () => [
+export const updateUserValidator = [
   validateFirstName.optional(),
   validateLastName.optional(),
   validateIsAlumni,

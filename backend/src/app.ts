@@ -20,7 +20,7 @@ app.use(
   }),
 );
 
-app.use("/api/user", users);
+app.use("/api/users", users);
 
 /**
  * Error handler; all errors thrown by server are handled here.
