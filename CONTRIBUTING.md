@@ -115,6 +115,8 @@ By participating in this project, you agree to uphold the [Code of Conduct](CODE
 
 ### Setting Up the Local Development Database
 
+#### MongoDB
+
 1. Go to [mongodb.com](https://www.mongodb.com/) and create a new account (or login to an existing account if you already have one).
 2. **Create a new project** and name it Opportune (or anything you like).
 3. **Create a new cluster** in this project by selecting M0 as the plan and deselect **Automate security setup** and **Preload sample datase**. Feel free to choose and name for the cluster and select any location that is closest to you.
@@ -125,8 +127,27 @@ By participating in this project, you agree to uphold the [Code of Conduct](CODE
    ```
    MONGODB_URI=[link-copied-from-mongodb]
    PORT=3500
+   FRONTEND_ORIGIN=http://localhost:3000
    ```
    Make sure to fill in the `<db_password>` field with the password of your account.
+
+#### AWS S3
+
+1. got to [https://aws.amazon.com/](https://aws.amazon.com/) and create a new account (or login to an existing account if you already have one).
+2. Search for S3 in the search bar and **create a new bucket**.
+3. Then search for IAM in the search bar and create a new user (feel free to name it anything you like), make sure to give the user the **AmazonS3FullAccess** policy. This allows the users to have access to your S3 bucket.
+4. For the user created, **add a new access key**. Make sure to keep this page open so that we can copy the Access Key.
+5. Then go to the `.env` file under the `backend` folder again and add the following to the file:
+   ```
+   AWS_ACCESS_KEY_ID=[access-key-id]
+   AWS_SECRET_ACCESS_KEY=[secret-access-key]
+   AWS_REGION=[region-of-bucket]
+   ```
+   Make sure to copy the **Access Key ID** and **Secrete Access Key** from the page in step 4 and fill in the region if your bucket.
+
+#### Google Oauth
+
+1.
 
 ### Running the Backend and Frontend
 

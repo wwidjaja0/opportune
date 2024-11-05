@@ -9,4 +9,7 @@ import { port, str } from "envalid/dist/validators";
 export default cleanEnv(process.env, {
   PORT: port(),
   MONGODB_URI: str(),
+  AWS_ACCESS_KEY_ID: str(),
+  AWS_SECRET_ACCESS_KEY: str(),
+  AWS_REGION: str(),
 });

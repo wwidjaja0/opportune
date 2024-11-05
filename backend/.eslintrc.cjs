@@ -50,6 +50,8 @@ module.exports = {
       },
     ],
 
+    "@typescript-eslint/no-unused-vars": "off",
+
     // Not necessary for some APIs (consistency reasons)
     "import/prefer-default-export": "off",
 
