@@ -1,8 +1,8 @@
 ---
-name: Engineering Issue
-about: Task to work on for engineers.
-title: "[ENGINEERING] Your issue title"
-labels: engineering
+name: Feature enhancement
+about: Suggest an improvement or enhancement to an existing feature.
+title: "[ENHANCEMENT] Your issue title"
+labels: enhancement
 assignees: ""
 ---
 
