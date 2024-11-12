@@ -2,7 +2,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 
 const savedApplicationSchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   companyId: {
@@ -33,4 +33,7 @@ const savedApplicationSchema = new Schema({
 
 type SavedApplication = InferSchemaType<typeof savedApplicationSchema>;
 
-export default model<SavedApplication>("User", savedApplicationSchema);
+export default model<SavedApplication>(
+  "SavedApplication",
+  savedApplicationSchema,
+);
