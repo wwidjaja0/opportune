@@ -1,12 +1,17 @@
 import { InferSchemaType, Schema, model } from "mongoose";
-import { applicationStatusSchema } from "./ApplicationStatus";
 
-const applicationSchema = new Schema({
-  _id: {
+const applicationStatusSchema = new Schema({
+  status: {
     type: String,
-    unique: true,
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+  },
+});
+
+const applicationSchema = new Schema({
   userId: {
     type: String,
     required: true,
@@ -33,10 +38,11 @@ const applicationSchema = new Schema({
   },
   },
   {
-    timestamps: { createdAt: 'dateCreated', updatedAt: 'dateModified' }
+    timestamps: true
   }
 );
 
 type Application = InferSchemaType<typeof applicationSchema>;
 
 export default model<Application>("Application", applicationSchema);
+
