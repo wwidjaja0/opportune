@@ -31,15 +31,11 @@ const applicationSchema = new Schema({
     type: [applicationStatusSchema],
     default: [],
   },
-  dateCreated: {
-    type: Date,
-    default: Date.now,
   },
-  dateModified: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: { createdAt: 'dateCreated', updatedAt: 'dateModified' }
+  }
+);
 
 type Application = InferSchemaType<typeof applicationSchema>;
 
