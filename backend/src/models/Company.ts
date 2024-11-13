@@ -3,7 +3,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 const companySchema = new Schema(
   {
     _id: {
-      type: Schema.Types.ObjectId,
+      type: String,
       unique: true,
       required: true,
     },
@@ -22,10 +22,6 @@ const companySchema = new Schema(
       trim: true,
       required: false,
     },
-  },
-  {
-    // Automatically generates created and updated times
-    timestamps: true,
   },
 );
 
