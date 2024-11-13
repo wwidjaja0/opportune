@@ -1,4 +1,5 @@
 import { InferSchemaType, Schema, model } from "mongoose";
+import { applicationStatusSchema } from "./ApplicationStatus";
 
 const applicationSchema = new Schema({
   _id: {
@@ -27,7 +28,7 @@ const applicationSchema = new Schema({
     required: false,
   },
   progress: {
-    type: [String],
+    type: [applicationStatusSchema],
     default: [],
   },
   dateCreated: {
@@ -41,4 +42,5 @@ const applicationSchema = new Schema({
 });
 
 type Application = InferSchemaType<typeof applicationSchema>;
+
 export default model<Application>("Application", applicationSchema);
