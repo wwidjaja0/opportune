@@ -23,7 +23,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    //this is what im doing
     linkedIn: {
       type: String,
     },
