@@ -19,4 +19,6 @@ userRouter.patch(
 );
 userRouter.delete("/:id", userController.deleteUser);
 
+userRouter.get("/alumni", userController.getOpenAlumni);
+
 export default userRouter;
