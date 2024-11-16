@@ -21,7 +21,7 @@ export const createUser = asyncHandler(async (req, res, next) => {
     classLevel,
     company,
     shareProfile,
-  } = req.params;
+  } = req.body;
 });
 
 // @desc Get user by ID
@@ -36,6 +36,15 @@ export const getUserById = asyncHandler(async (req, res, next) => {
 // @access Private
 export const updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  const {
+    type,
+    linkedIn,
+    phoneNumber,
+    major,
+    classLevel,
+    company,
+    shareProfile,
+  } = req.body;
 });
 
 // @desc Delete a user
@@ -49,5 +58,5 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
 // @route GET /api/users/alumni
 // @access Private
 export const getOpenAlumni = asyncHandler(async (req, res, next) => {
-  const { key } = req.params;
+  const { page, perPage, query } = req.query;
 });
