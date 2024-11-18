@@ -1,7 +1,7 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import userRouter from "src/routes/UserRoutes";
+import userRouter from "src/routes/userRoutes";
 import errorHandler from "src/middlewares/errorHandler";
 
 const app = express();
