@@ -3,8 +3,6 @@
  * https://github.com/TritonSE/TSE-Fulcrum/blob/main/frontend/src/api.ts
  */
 
-import { Queries } from "../types/Queries";
-
 /**
  * A custom type defining which HTTP methods we will handle in this file
  */
@@ -89,7 +87,7 @@ async function assertOk(response: Response): Promise<void> {
  */
 export async function get(
   url: string,
-  queries: Queries = {},
+  queries: Record<string, string | number | boolean> = {},
   headers: Record<string, string> = {},
 ): Promise<Response> {
   // Construct the query string
