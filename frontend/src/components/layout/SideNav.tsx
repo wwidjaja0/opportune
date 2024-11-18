@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { navItems } from "../../constants/navItems";
-import { NavItem } from "../../types/navItem";
+import { NavItem } from "../../types/NavItem";
 
 const SideNav = () => {
   return (
