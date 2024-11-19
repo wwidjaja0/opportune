@@ -1,5 +1,4 @@
 import { Result, ValidationError } from "express-validator";
-import createHttpError from "http-errors";
 
 /**
  * Parses through errors thrown by validator (if any exist). Error messages are
@@ -8,18 +7,15 @@ import createHttpError from "http-errors";
  *
  * @param errors the validation result provided by express validator middleware
  */
-const validationErrorParser = (errors: Result<ValidationError>) => {
+const validationErrorParser = (errors: Result<ValidationError>): string => {
+  let errorString = "";
   if (!errors.isEmpty()) {
-    let errorString = "";
-
     // parse through errors returned by the validator and append them to the error string
     for (const error of errors.array()) {
       errorString += error.msg + " ";
     }
-
-    // trim removes the trailing space created in the for loop
-    throw createHttpError(400, errorString.trim());
   }
+  return errorString;
 };
 
 export default validationErrorParser;
