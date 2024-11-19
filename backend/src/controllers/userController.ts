@@ -1,10 +1,19 @@
 import User from "src/models/User";
 import asyncHandler from "express-async-handler";
+import createHttpError from "http-errors";
 
 // @desc Get all users
 // @route GET /api/users
 // @access Private
-export const getUsers = asyncHandler(async (req, res, next) => {});
+export const getUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find().lean().exec();
+
+  if (!users.length) {
+    return next(createHttpError(404, "No users found."));
+  }
+
+  res.json(users);
+});
 
 // @desc Create new user
 // @route POST /api/users
