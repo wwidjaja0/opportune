@@ -88,7 +88,7 @@ export const getApplicationByID = asyncHandler(
  */
 export const updateApplicationID = asyncHandler(
   async (
-    req: Request<{ id: string }, object , Partial<CreateApplicationRequest>>,
+    req: Request<{ id: string }, object, Partial<CreateApplicationRequest>>,
     res: Response,
     next: NextFunction,
   ) => {
@@ -125,10 +125,16 @@ export const deleteApplicationByID = asyncHandler(
  */
 export const getApplicationsByUserID = asyncHandler(
   async (
-    req: Request<{ userId: string }>,
+    req: Request<
+      { userId: string },
+      object,
+      object,
+      { query?: string; status?: string; sortBy?: string }
+    >,
     res: Response,
     next: NextFunction,
   ) => {
     const { userId } = req.params;
+    const { query, status, sortBy } = req.query;
   },
 );
