@@ -17,15 +17,16 @@ const validatePerPage = query("perPage")
   .withMessage("perPage must be positive integers");
 
 const validateQuery = query("query")
+  .isString()
+  .withMessage("Query must be a string")
   .trim()
   .notEmpty()
-  .withMessage("Missing query")
-  .isString()
-  .withMessage("Query must be a string");
+  .withMessage("Missing query");
 
 const validateQueryState = query("state")
   .default("all")
   .isString()
+  .withMessage("State must be a string")
   .trim()
   .notEmpty()
   .withMessage("State must be a non-empty string");
@@ -34,6 +35,7 @@ const validateName = body("name")
   .exists()
   .withMessage("Missing name")
   .isString()
+  .withMessage("Name must be a string")
   .trim()
   .notEmpty()
   .withMessage("Name must be a non-empty string");
@@ -41,6 +43,7 @@ const validateName = body("name")
 const validateCity = body("city")
   .optional()
   .isString()
+  .withMessage("City must be a string")
   .trim()
   .notEmpty()
   .withMessage("City must be a non-empty string");
@@ -48,6 +51,7 @@ const validateCity = body("city")
 const validateState = body("state")
   .optional()
   .isString()
+  .withMessage("State must be a string")
   .trim()
   .notEmpty()
   .withMessage("State must be a non-empty string");
