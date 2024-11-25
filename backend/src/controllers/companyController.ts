@@ -16,17 +16,23 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
 
   const { page, perPage, query, state } = matchedData(req);
 
+  const total = await Company.countDocuments();
+
   // Find companies matching the query and paginate
-  const dbQuery = Company.find({
-    name: { $regex: query, $options: "i" },
-  })
-    .skip((page - 1) * perPage)
-    .limit(perPage);
+  const dbQuery = Company.find();
+
+  // Search by name if provided
+  if (query !== "") {
+    dbQuery.where("name").regex(new RegExp(query, "i"));
+  }
 
   // Filter by state if provided
   if (state != "all") {
     dbQuery.where("state").equals(state);
   }
+
+  // Paginate
+  dbQuery.skip(page * perPage).limit(perPage);
 
   const companies = await dbQuery.lean().exec();
 
@@ -38,7 +44,8 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     page,
     perPage,
-    companies,
+    total,
+    data: companies,
   });
 });
 

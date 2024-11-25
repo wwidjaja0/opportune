@@ -1,29 +1,22 @@
 import { body, param, query } from "express-validator";
 
 // Default values for page and perPage
-const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE = 0;
 const DEFAULT_PER_PAGE = 10;
 
 const validatePage = query("page")
   .default(DEFAULT_PAGE)
-  .isInt({ min: 1 })
+  .isInt({ min: 0 })
   .toInt()
-  .withMessage("Page must be positive integers");
+  .withMessage("Page must be >= 0");
 
 const validatePerPage = query("perPage")
   .default(DEFAULT_PER_PAGE)
   .isInt({ min: 1 })
   .toInt()
-  .withMessage("perPage must be positive integers");
+  .withMessage("perPage must be a positive integer");
 
-const validateQuery = query("query")
-  .exists()
-  .withMessage("Missing query")
-  .isString()
-  .withMessage("Query must be a string")
-  .trim()
-  .notEmpty()
-  .withMessage("Query must be a non-empty string");
+const validateQuery = query("query").optional().isString().trim();
 
 const validateQueryState = query("state")
   .default("all")
