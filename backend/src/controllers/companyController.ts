@@ -18,7 +18,7 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
 
   const total = await Company.countDocuments();
 
-  // Find companies matching the query and paginate
+  // Begin query
   const dbQuery = Company.find();
 
   // Search by name if provided
