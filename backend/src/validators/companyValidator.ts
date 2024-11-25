@@ -1,4 +1,4 @@
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 
 // Default values for page and perPage
 const DEFAULT_PAGE = 1;
@@ -56,6 +56,10 @@ const validateState = body("state")
   .notEmpty()
   .withMessage("State must be a non-empty string");
 
+const validateId = param("id").isMongoId().withMessage("Invalid company id");
+
+export const getCompanyValidator = [validateId];
+
 export const getCompaniesValidator = [
   validatePage,
   validatePerPage,
@@ -70,7 +74,10 @@ export const createCompanyValidator = [
 ];
 
 export const updateCompanyValidator = [
+  validateId,
   validateName.optional(),
   validateCity,
   validateState,
 ];
+
+export const deleteCompanyValidator = [validateId];
