@@ -17,11 +17,13 @@ const validatePerPage = query("perPage")
   .withMessage("perPage must be positive integers");
 
 const validateQuery = query("query")
+  .exists()
+  .withMessage("Missing query")
   .isString()
   .withMessage("Query must be a string")
   .trim()
   .notEmpty()
-  .withMessage("Missing query");
+  .withMessage("Query must be a non-empty string");
 
 const validateQueryState = query("state")
   .default("all")
