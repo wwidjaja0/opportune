@@ -43,7 +43,7 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create a new company
-// @route POST /api/company
+// @route POST /api/companies
 // @access Private
 export const createCompany = asyncHandler(async (req, res, next) => {
   const result = validationResult(req);
