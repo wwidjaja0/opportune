@@ -4,9 +4,9 @@ import { NavItem } from "../../types/NavItem";
 
 const SideNav = () => {
   return (
-    <aside className="h-screen w-[15%] bg-gray-300">
+    <aside className="h-screen w-[15%] bg-gray-300 flex flex-col">
       <div className="text-xl font-bold py-[4%]">Opportune</div>
-      <nav className="h-full w-full">
+      <nav className="flex-grow">
         <ul className="h-full w-full">
           {navItems.map((navItem: NavItem, index: number) => {
             return (

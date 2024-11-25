@@ -21,4 +21,8 @@ export const navItems: NavItem[] = [
     label: "Saved Jobs",
     url: "/applications/saved",
   },
+  {
+    label: "Sandbox",
+    url: "/sandbox",
+  },
 ];
