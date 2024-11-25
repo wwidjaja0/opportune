@@ -27,7 +27,7 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
   }
 
   // Filter by state if provided
-  if (state != "all") {
+  if (state !== "all") {
     dbQuery.where("state").equals(state);
   }
 
