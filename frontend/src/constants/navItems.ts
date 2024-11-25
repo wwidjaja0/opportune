@@ -6,7 +6,23 @@ export const navItems: NavItem[] = [
     url: "/",
   },
   {
+    label: "Companies",
+    url: "/companies",
+  },
+  {
+    label: "Connect",
+    url: "/connect",
+  },
+  {
     label: "Applications",
-    url: "/applications",
+    url: "/applications/applied",
+  },
+  {
+    label: "Saved Jobs",
+    url: "/applications/saved",
+  },
+  {
+    label: "Sandbox",
+    url: "/sandbox",
   },
 ];

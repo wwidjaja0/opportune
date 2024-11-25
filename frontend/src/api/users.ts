@@ -1,3 +1,4 @@
+import { PaginatedData } from "../types/PaginatedData";
 import {
   Alumni,
   CreateUserRequest,
@@ -6,7 +7,7 @@ import {
   UpdateUserRequest,
   UserJSON,
 } from "../types/User";
-import { isAlumni, isStudent } from "../utils/checkUserType";
+import { isAlumni, isStudent } from "../utils/checkType";
 import { APIResult, get, del, patch, post, handleAPIError } from "./requests";
 
 function parseUser(user: UserJSON): Student | Alumni {
@@ -59,6 +60,12 @@ export async function getUserById(
   }
 }
 
+/**
+ * Create a new user in the backend.
+ *
+ * @param user new user to create
+ * @returns The created user object
+ */
 export async function createUser(
   user: CreateUserRequest,
 ): Promise<APIResult<Student | Alumni>> {
@@ -71,6 +78,13 @@ export async function createUser(
   }
 }
 
+/**
+ * Update a user in the backend.
+ *
+ * @param id id of user to update
+ * @param user Fields to update
+ * @returns updated user
+ */
 export async function updateUser(
   id: string,
   user: UpdateUserRequest,
@@ -100,19 +114,19 @@ export async function deleteUser(id: string): Promise<APIResult<null>> {
 }
 
 /**
- * Fetch a single user by ID from the backend.
+ * Fetch alumni that are willing to share profile from the backend
  *
- * @param id The ID of the user to fetch
- * @returns The user object
+ * @param queries
+ * @returns PaginatedData object containing alumni profile
  */
 export async function getAlumni(
-  id: string,
   queries: GetAlumniQuery = { page: 0, perPage: 10 },
-): Promise<APIResult<Alumni>> {
+): Promise<APIResult<PaginatedData<Alumni>>> {
   try {
-    const response = await get(`/api/users/${id}`, { ...queries });
-    const json = (await response.json()) as UserJSON;
-    return { success: true, data: parseAlumni(json) };
+    const response = await get(`/api/users/alumni`, { ...queries });
+    const json = (await response.json()) as PaginatedData<UserJSON>;
+    const result = { ...json, data: json.data.map(parseAlumni) };
+    return { success: true, data: result };
   } catch (error) {
     return handleAPIError(error);
   }
