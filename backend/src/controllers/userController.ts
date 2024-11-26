@@ -3,6 +3,7 @@ import { matchedData, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
 import validationErrorParser from "src/util/validationErrorParser";
+import Company from "src/models/Company";
 
 interface BaseUserResponse {
   _id?: string;
@@ -36,6 +37,8 @@ export const getUsers = asyncHandler(async (_, res, next) => {
   if (!users.length) {
     return next(createHttpError(404, "No users found."));
   }
+
+  User.find().populate({ path: "company", model: Company });
 
   res.status(200).json(users);
 });
