@@ -4,7 +4,11 @@ import * as userValidator from "src/validators/userValidator";
 
 const userRouter = express.Router();
 
-userRouter.get("/alumni", userController.getOpenAlumni);
+userRouter.get(
+  "/alumni",
+  userValidator.getOpenAlumniValidator,
+  userController.getOpenAlumni,
+);
 
 userRouter.get("/:id", userController.getUserById);
 userRouter.patch(
