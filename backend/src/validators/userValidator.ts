@@ -77,10 +77,9 @@ const validatePerPage = query("perPage")
   .withMessage("perPage must be a number.");
 
 const validateQuery = query("query")
+  .optional()
   .isString()
-  .withMessage("query must be a string.")
-  .isLength({ min: 1 })
-  .withMessage("query is required.");
+  .withMessage("query must be a string.");
 
 export const createUserValidator = [
   validateId,
