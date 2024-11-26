@@ -1,4 +1,4 @@
-import User from "src/models/User";
+import User, { UserType } from "src/models/User";
 import { matchedData, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
@@ -108,7 +108,7 @@ export const getUserById = asyncHandler(async (req, res, next) => {
     type: foundUser.type,
   };
 
-  if (foundUser.type.includes("Student")) {
+  if (foundUser.type === UserType.Student) {
     responseData = {
       ...responseData,
       linkedIn: foundUser.linkedIn,
@@ -178,7 +178,6 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
   const foundUser = await User.findByIdAndDelete(id);
 
   // check if the user already exists
-  // check if the user exists
   if (!foundUser) {
     return next(createHttpError(404, "User not found."));
   }
@@ -195,22 +194,14 @@ export const getOpenAlumni = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, validationErrorParser(errors)));
   }
 
-  const { page = "1", perPage = "10", query } = req.query;
-  console.log(req.query);
-
-  const pageString = typeof page === "string" ? page : "1";
-  const perPageString = typeof perPage === "string" ? perPage : "10";
-
-  // check if the query parameter is missing or empty
-  if (typeof query !== "string" || query.trim() === "") {
-    return next(createHttpError(400, "Missing or empty query parameter."));
-  }
-
-  const pageNum = parseInt(pageString, 10) || 1;
-  const perPageNum = parseInt(perPageString, 10) || 10;
+  const {
+    page = 0,
+    perPage = 10,
+    query,
+  } = matchedData(req, { locations: ["query"] });
 
   const dbQuery = User.find({
-    type: "Alumni",
+    type: UserType.Alumni,
     shareProfile: true,
   });
 
@@ -223,18 +214,18 @@ export const getOpenAlumni = asyncHandler(async (req, res, next) => {
   const total = await dbQuery.clone().countDocuments();
 
   // apply pagination
-  dbQuery.skip((pageNum - 1) * perPageNum).limit(perPageNum);
+  dbQuery.skip(page * perPage).limit(perPage);
 
   const users = await dbQuery.lean().exec();
 
-  // checks if we found any users
+  // check if we found any users
   if (users.length === 0) {
     return next(createHttpError(404, "No alumni found matching the criteria."));
   }
 
   res.status(200).json({
-    page: pageNum,
-    perPage: perPageNum,
+    page,
+    perPage,
     total,
     data: users.map((user) => ({
       id: user._id,

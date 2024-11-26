@@ -1,4 +1,5 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
+import { UserType } from "src/models/User";
 
 const validateId = body("_id")
   .isString()
@@ -23,7 +24,9 @@ const validateName = body("name")
 const validateType = body("type")
   .optional()
   .isString()
-  .withMessage("type of account must be a string.");
+  .withMessage("type of account must be a string.")
+  .isIn(Object.values(UserType))
+  .withMessage("type is not a valid user type.");
 
 const validateLinkedIn = body("linkedIn")
   .optional()
@@ -63,6 +66,22 @@ const validateShareProfile = body("shareProfile")
   .isBoolean()
   .withMessage("shareProfile must be a boolean.");
 
+const validatePage = query("page")
+  .optional()
+  .isNumeric()
+  .withMessage("page must be a number.");
+
+const validatePerPage = query("perPage")
+  .optional()
+  .isNumeric()
+  .withMessage("perPage must be a number.");
+
+const validateQuery = query("query")
+  .isString()
+  .withMessage("query must be a string.")
+  .isLength({ min: 1 })
+  .withMessage("query is required.");
+
 export const createUserValidator = [
   validateId,
   validateEmail,
@@ -85,4 +104,10 @@ export const updateUserValidator = [
   validateClassLevel,
   validateCompany,
   validateShareProfile,
+];
+
+export const getOpenAlumniValidator = [
+  validatePage,
+  validatePerPage,
+  validateQuery,
 ];
