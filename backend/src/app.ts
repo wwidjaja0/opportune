@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import userRouter from "src/routes/userRoutes";
+import companyRouter from "src/routes/companyRoutes";
 import errorHandler from "src/middlewares/errorHandler";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(
 );
 
 app.use("/api/users", userRouter);
+app.use("/api/companies", companyRouter);
 
 /**
  * Error handler; all errors thrown by server are handled here.
