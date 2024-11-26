@@ -4,12 +4,7 @@ import * as userValidator from "src/validators/userValidator";
 
 const userRouter = express.Router();
 
-userRouter.get("/", userController.getUsers);
-userRouter.post(
-  "/",
-  userValidator.createUserValidator,
-  userController.createUser,
-);
+userRouter.get("/alumni", userController.getOpenAlumni);
 
 userRouter.get("/:id", userController.getUserById);
 userRouter.patch(
@@ -19,6 +14,11 @@ userRouter.patch(
 );
 userRouter.delete("/:id", userController.deleteUser);
 
-userRouter.get("/alumni", userController.getOpenAlumni);
+userRouter.get("/", userController.getUsers);
+userRouter.post(
+  "/",
+  userValidator.createUserValidator,
+  userController.createUser,
+);
 
 export default userRouter;
