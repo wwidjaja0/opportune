@@ -19,27 +19,31 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
   // Begin query
   const dbQuery = Company.find();
 
-  // Duplicate needed to count the number of documents
-  const countQuery = Company.find();
-
   // Search by name if provided
   if (query !== "") {
-    countQuery.where("name").regex(new RegExp(query, "i"));
     dbQuery.where("name").regex(new RegExp(query, "i"));
   }
 
   // Filter by state if provided
   if (state !== "all") {
-    countQuery.where("state").equals(state);
     dbQuery.where("state").equals(state);
   }
 
-  const total = await countQuery.countDocuments().exec();
+  // Duplicate before pagination to get total count
+  const countQuery = dbQuery.clone().countDocuments();
 
   // Paginate
   dbQuery.skip(page * perPage).limit(perPage);
 
-  const companies = await dbQuery.lean().exec();
+  // Execute both queries in parallel
+  const [total, companies] = await Promise.all([
+    countQuery.countDocuments().exec(),
+    dbQuery
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean()
+      .exec(),
+  ]);
 
   // Return 404 if no companies are found
   if (companies.length === 0) {
