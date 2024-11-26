@@ -32,13 +32,14 @@ type UserResponse = StudentResponse | AlumniResponse;
 // @route GET /api/users
 // @access Private
 export const getUsers = asyncHandler(async (_, res, next) => {
-  const users = await User.find().lean().exec();
+  const users = await User.find()
+    .populate({ path: "company", model: Company })
+    .lean()
+    .exec();
 
   if (!users.length) {
     return next(createHttpError(404, "No users found."));
   }
-
-  User.find().populate({ path: "company", model: Company });
 
   res.status(200).json(users);
 });
@@ -73,6 +74,9 @@ export const createUser = asyncHandler(async (req, res, next) => {
   if (foundUser) {
     return next(createHttpError(409, "User already exists."));
   }
+
+  // find company, if not found, create a new company
+  // figure out internal api calls in a future PR?
 
   const newUser = new User({
     _id,
@@ -151,6 +155,9 @@ export const updateUser = asyncHandler(async (req, res, next) => {
   if (Object.keys(validatedData).length === 0) {
     return next(createHttpError(400, "At least one field required to update."));
   }
+
+  // find company, if not found, create a new company
+  // figure out internal api calls in a future PR?
 
   // find the user to update
   const foundUser = await User.findByIdAndUpdate(
