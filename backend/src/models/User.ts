@@ -16,11 +16,13 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   // Pass in from google
   name: {
     type: String,
     required: true,
+    trim: true,
   },
   type: {
     type: String,
@@ -29,13 +31,16 @@ const userSchema = new Schema({
   },
   linkedIn: {
     type: String,
+    trim: true,
   },
   phoneNumber: {
     type: String,
+    trim: true,
   },
   // Only for students
   major: {
     type: String,
+    trim: true,
   },
   // Only for students
   classLevel: {
