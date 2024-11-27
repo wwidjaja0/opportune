@@ -3,6 +3,15 @@ import { matchedData, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
 
+interface BaseCompanyResponse {
+  _id?: string;
+  email: string;
+  name: string;
+  type: string;
+}
+
+type CompanyResponse = BaseCompanyResponse | undefined;
+
 // @desc Get companies matching the query
 // @route GET /api/companies
 // @access Private

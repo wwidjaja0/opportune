@@ -4,6 +4,7 @@ import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
 import validationErrorParser from "src/util/validationErrorParser";
 import Company from "src/models/Company";
+import mongoose from "mongoose";
 
 interface BaseUserResponse {
   _id?: string;
@@ -22,7 +23,7 @@ interface StudentResponse extends BaseUserResponse {
 interface AlumniResponse extends BaseUserResponse {
   linkedIn?: string;
   phoneNumber?: string;
-  company?: string;
+  company?: mongoose.Types.ObjectId;
   shareProfile?: boolean;
 }
 
@@ -103,7 +104,13 @@ export const getUserById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   // check if the user exists
-  const foundUser = await User.findById(id);
+  const foundUser = await User.findById(id)
+    .populate({
+      path: "company",
+      model: Company,
+    })
+    .lean()
+    .exec();
   if (!foundUser) {
     return next(createHttpError(404, "User not found."));
   }
@@ -226,7 +233,11 @@ export const getOpenAlumni = asyncHandler(async (req, res, next) => {
   // apply pagination
   dbQuery.skip(page * perPage).limit(perPage);
 
-  const users = await dbQuery.lean().exec();
+  // populate the users with company objects
+  const users = await dbQuery
+    .populate({ path: "company", model: Company })
+    .lean()
+    .exec();
 
   // check if we found any users
   if (users.length === 0) {
