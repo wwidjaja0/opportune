@@ -10,13 +10,21 @@ userRouter.get(
   userController.getOpenAlumni,
 );
 
-userRouter.get("/:id", userController.getUserById);
+userRouter.get(
+  "/:id",
+  userValidator.getUservalidator,
+  userController.getUserById,
+);
 userRouter.patch(
   "/:id",
   userValidator.updateUserValidator,
   userController.updateUser,
 );
-userRouter.delete("/:id", userController.deleteUser);
+userRouter.delete(
+  "/:id",
+  userValidator.deleteUserValidator,
+  userController.deleteUser,
+);
 
 userRouter.get("/", userController.getUsers);
 userRouter.post(

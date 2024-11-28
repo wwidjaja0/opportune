@@ -70,7 +70,9 @@ export const createUser = asyncHandler(async (req, res, next) => {
   // check if the user already exists
   const foundUser = await User.findOne({
     $or: [{ _id }, { email }],
-  }).lean();
+  })
+    .lean()
+    .exec();
 
   if (foundUser) {
     return next(createHttpError(409, "User already exists."));
@@ -101,7 +103,7 @@ export const createUser = asyncHandler(async (req, res, next) => {
 // @route GET /api/users/:id
 // @access Private
 export const getUserById = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = matchedData(req, { locations: ["params"] });
 
   // check if the user exists
   const foundUser = await User.findById(id)
@@ -155,7 +157,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, validationErrorParser(errors)));
   }
 
-  const { id } = req.params;
+  const { id } = matchedData(req, { locations: ["params"] });
   const validatedData = matchedData(req, { locations: ["body"] });
 
   // check if at least one field to update is in body
@@ -190,7 +192,7 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, validationErrorParser(errors)));
   }
 
-  const { id } = req.params;
+  const { id } = matchedData(req, { locations: ["params"] });
 
   const foundUser = await User.findByIdAndDelete(id);
 
@@ -223,17 +225,19 @@ export const getOpenAlumni = asyncHandler(async (req, res, next) => {
     dbQuery.where("name").regex(new RegExp(query, "i"));
   }
 
-  // count total results for pagination
-  const total = await dbQuery.clone().countDocuments();
+  // ensure count and paginate do not conflict
+  const countQuery = dbQuery.clone();
 
-  // apply pagination
-  dbQuery.skip(page * perPage).limit(perPage);
-
-  // populate the users with company objects
-  const users = await dbQuery
-    .populate({ path: "company", model: Company })
-    .lean()
-    .exec();
+  // count total results, populate company, and paginate in parallel
+  const [total, users] = await Promise.all([
+    countQuery.countDocuments(),
+    dbQuery
+      .skip(page * perPage)
+      .limit(perPage)
+      .populate({ path: "company", model: Company })
+      .lean()
+      .exec(),
+  ]);
 
   // check if we found any users
   if (users.length === 0) {

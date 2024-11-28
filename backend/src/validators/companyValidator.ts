@@ -8,50 +8,52 @@ const validatePage = query("page")
   .default(DEFAULT_PAGE)
   .isInt({ min: 0 })
   .toInt()
-  .withMessage("Page must be >= 0");
+  .withMessage("page must be an integer > -1.");
 
 const validatePerPage = query("perPage")
   .default(DEFAULT_PER_PAGE)
   .isInt({ min: 1 })
   .toInt()
-  .withMessage("perPage must be a positive integer");
+  .withMessage("perPage must be an integer > 0.");
 
-const validateQuery = query("query").optional().isString().trim();
+const validateQuery = query("query")
+  .optional()
+  .isString()
+  .withMessage("query must be a string.")
+  .trim();
 
 const validateQueryState = query("state")
-  .default("all")
+  .optional()
   .isString()
-  .withMessage("State must be a string")
-  .trim()
-  .notEmpty()
-  .withMessage("State must be a non-empty string");
+  .withMessage("state must be a string.")
+  .trim();
 
 const validateName = body("name")
-  .exists()
-  .withMessage("Missing name")
   .isString()
-  .withMessage("Name must be a string")
+  .withMessage("name must be a string.")
   .trim()
   .notEmpty()
-  .withMessage("Name must be a non-empty string");
+  .withMessage("name must be a non-empty string.");
 
 const validateCity = body("city")
   .optional()
   .isString()
-  .withMessage("City must be a string")
+  .withMessage("city must be a string.")
   .trim()
   .notEmpty()
-  .withMessage("City must be a non-empty string");
+  .withMessage("city must be a non-empty string.");
 
 const validateState = body("state")
   .optional()
   .isString()
-  .withMessage("State must be a string")
+  .withMessage("state must be a string.")
   .trim()
   .notEmpty()
-  .withMessage("State must be a non-empty string");
+  .withMessage("state must be a non-empty string.");
 
-const validateId = param("id").isMongoId().withMessage("Invalid company id"); // is this necessary?
+const validateId = param("id")
+  .isMongoId()
+  .withMessage("Invalid company id. (Must be a Mongo ObjectID.)");
 
 export const getCompanyValidator = [validateId];
 
