@@ -26,33 +26,40 @@ const userSchema = new Schema({
   },
   type: {
     type: String,
+    required: true,
     enum: Object.values(UserType),
     default: UserType.Student,
   },
   linkedIn: {
     type: String,
+    required: false,
     trim: true,
   },
   phoneNumber: {
     type: String,
+    required: false,
     trim: true,
   },
   // Only for students
   major: {
     type: String,
+    required: false,
     trim: true,
   },
   // Only for students
   classLevel: {
     type: String,
+    required: false, // also eventually an enum?
   },
   // Only for alumni
   company: {
     type: Schema.Types.ObjectId,
+    required: false,
   },
   // Only for alumni
   shareProfile: {
     type: Boolean,
+    required: false,
   },
 });
 

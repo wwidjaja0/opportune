@@ -1,6 +1,10 @@
 import { body, query } from "express-validator";
 import { UserType } from "src/models/User";
 
+// Default values for page and perPage
+const DEFAULT_PAGE = 0;
+const DEFAULT_PER_PAGE = 10;
+
 const validateId = body("_id")
   .isString()
   .withMessage("_id must be a string.")
@@ -67,14 +71,16 @@ const validateShareProfile = body("shareProfile")
   .withMessage("shareProfile must be a boolean.");
 
 const validatePage = query("page")
-  .optional()
-  .isNumeric()
-  .withMessage("page must be a number.");
+  .default(DEFAULT_PAGE)
+  .isInt({ min: 0 })
+  .toInt()
+  .withMessage("page must be an integer > -1.");
 
 const validatePerPage = query("perPage")
-  .optional()
-  .isNumeric()
-  .withMessage("perPage must be a number.");
+  .default(DEFAULT_PER_PAGE)
+  .isInt({ min: 1 })
+  .toInt()
+  .withMessage("perPage must be an integer > 0.");
 
 const validateQuery = query("query")
   .optional()

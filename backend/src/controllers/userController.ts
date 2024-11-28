@@ -211,11 +211,7 @@ export const getOpenAlumni = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, validationErrorParser(errors)));
   }
 
-  const {
-    page = 0,
-    perPage = 10,
-    query,
-  } = matchedData(req, { locations: ["query"] });
+  const { page, perPage, query } = matchedData(req, { locations: ["query"] });
 
   const dbQuery = User.find({
     type: UserType.Alumni,

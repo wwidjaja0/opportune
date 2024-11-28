@@ -2,7 +2,9 @@ import Company from "src/models/Company";
 import { matchedData, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
+import validationErrorParser from "src/util/validationErrorParser";
 
+/*
 interface BaseCompanyResponse {
   _id?: string;
   email: string;
@@ -11,16 +13,15 @@ interface BaseCompanyResponse {
 }
 
 type CompanyResponse = BaseCompanyResponse | undefined;
+*/
 
 // @desc Get companies matching the query
 // @route GET /api/companies
 // @access Private
 export const getCompanies = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    return next(
-      createHttpError(400, result.array({ onlyFirstError: true })[0].msg),
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   const { page, perPage, query, state } = matchedData(req);
@@ -71,11 +72,9 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
 // @route POST /api/companies
 // @access Private
 export const createCompany = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    return next(
-      createHttpError(400, result.array({ onlyFirstError: true })[0].msg),
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   const { name, city, state } = matchedData(req);
@@ -101,11 +100,9 @@ export const createCompany = asyncHandler(async (req, res, next) => {
 // @route GET /api/companies/:id
 // @access Private
 export const getCompanyById = asyncHandler(async (req, res, next) => {
-  const results = validationResult(req);
-  if (!results.isEmpty()) {
-    return next(
-      createHttpError(400, results.array({ onlyFirstError: true })[0].msg),
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   const { id } = matchedData(req);
@@ -123,11 +120,9 @@ export const getCompanyById = asyncHandler(async (req, res, next) => {
 // @route PATCH /api/companies/:id
 // @access Private
 export const updateCompany = asyncHandler(async (req, res, next) => {
-  const results = validationResult(req);
-  if (!results.isEmpty()) {
-    return next(
-      createHttpError(400, results.array({ onlyFirstError: true })[0].msg),
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   const { id, name, city, state } = matchedData(req);
@@ -159,11 +154,9 @@ export const updateCompany = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/companies/:id
 // @access Private
 export const deleteCompany = asyncHandler(async (req, res, next) => {
-  const results = validationResult(req);
-  if (!results.isEmpty()) {
-    return next(
-      createHttpError(400, results.array({ onlyFirstError: true })[0].msg),
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   const { id } = matchedData(req);

@@ -51,7 +51,7 @@ const validateState = body("state")
   .notEmpty()
   .withMessage("State must be a non-empty string");
 
-const validateId = param("id").isMongoId().withMessage("Invalid company id");
+const validateId = param("id").isMongoId().withMessage("Invalid company id"); // is this necessary?
 
 export const getCompanyValidator = [validateId];
 
