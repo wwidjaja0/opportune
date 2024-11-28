@@ -22,6 +22,7 @@ interface ApplicationUpdate extends Partial<ApplicationCreate> {}
 //
 // @returns {Application[]} 200 - Array of applications
 export const getAllApplications = asyncHandler(async (req, res, next) => {
+  // Retrieve all applications from the database
   const applications = await Application.find().lean().exec();
 
   res.status(200).json(applications);
@@ -41,9 +42,10 @@ export const createApplication = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, errorMessage));
   }
 
+  // Extract validated data from the request body
   const applicationData = matchedData(req) as ApplicationCreate;
 
-  // check if there is already an exisiting application
+  // Check if an application with the same userId, companyId, and position already exists
   const existingApplication = await Application.findOne({
     userId: applicationData.userId,
     companyId: applicationData.companyId,
@@ -56,6 +58,7 @@ export const createApplication = asyncHandler(async (req, res, next) => {
     return next(createHttpError(409, "Application already exists"));
   }
 
+  // Create a new application with the validated data
   const newApplication = new Application(applicationData);
   await newApplication.save();
 
@@ -76,7 +79,11 @@ export const getApplicationByID = asyncHandler(async (req, res, next) => {
     const errorMessage = validationErrorParser(result);
     return next(createHttpError(400, errorMessage));
   }
+
+  // Extract the validated 'id' from request parameters
   const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
+
+  // Find the application by ID
   const application = await Application.findById(id).lean().exec();
 
   if (!application) {
@@ -101,18 +108,23 @@ export const updateApplicationByID = asyncHandler(async (req, res, next) => {
     const errorMessage = validationErrorParser(result);
     return next(createHttpError(400, errorMessage));
   }
+
+  // Extract the validated 'id' from request parameters
   const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
 
+  // Extract the validated fields to update from request body
   const validatedData = matchedData(req, {
     locations: ["body"],
   }) as ApplicationUpdate;
 
   if (Object.keys(validatedData).length === 0) {
+    // If no fields are provided to update, return a 400 Bad Request
     return next(
       createHttpError(400, "At least one field is required to update."),
     );
   }
 
+  // Update the application with the provided data
   const updatedApplication = await Application.findByIdAndUpdate(
     id,
     { $set: validatedData },
@@ -141,8 +153,10 @@ export const deleteApplicationByID = asyncHandler(async (req, res, next) => {
     return next(createHttpError(400, errorMessage));
   }
 
+  // Extract the validated 'id' from request parameters
   const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
 
+  // Find and delete the application by ID
   const application = await Application.findByIdAndDelete(id).lean().exec();
 
   if (!application) {
