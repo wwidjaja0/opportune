@@ -1,4 +1,5 @@
 import Application from "src/models/Application";
+import Company from "src/models/Company";
 import { matchedData, validationResult } from "express-validator";
 import validationErrorParser from "src/util/validationErrorParser";
 import asyncHandler from "express-async-handler";
@@ -36,10 +37,9 @@ export const getAllApplications = asyncHandler(async (req, res, next) => {
 //  @returns {Application} 201 - Created application
 //  @throws {400} - If required fields are missing
 export const createApplication = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    const errorMessage = validationErrorParser(result);
-    return next(createHttpError(400, errorMessage));
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   // Extract validated data from the request body
@@ -74,10 +74,9 @@ export const createApplication = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const getApplicationByID = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    const errorMessage = validationErrorParser(result);
-    return next(createHttpError(400, errorMessage));
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   // Extract the validated 'id' from request parameters
@@ -103,10 +102,9 @@ export const getApplicationByID = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const updateApplicationByID = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    const errorMessage = validationErrorParser(result);
-    return next(createHttpError(400, errorMessage));
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   // Extract the validated 'id' from request parameters
@@ -147,10 +145,9 @@ export const updateApplicationByID = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const deleteApplicationByID = asyncHandler(async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    const errorMessage = validationErrorParser(result);
-    return next(createHttpError(400, errorMessage));
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
   }
 
   // Extract the validated 'id' from request parameters

@@ -1,8 +1,9 @@
 import { body, param, query } from "express-validator";
+import Company from "src/models/Company";
 
 const validateId = param("id")
   .isMongoId()
-  .withMessage("Invalid application id. (Must be a Mongo ObjectID.)")
+  .withMessage("invalid application id. (Must be a Mongo ObjectID.)")
   .trim();
 
 const validateUserId = body("userId")
@@ -14,7 +15,7 @@ const validateUserId = body("userId")
 
 const validateCompanyId = body("companyId")
   .isMongoId()
-  .withMessage("Invalid company ID. (Must be a Mongo ObjectID.)")
+  .withMessage("invalid company ID. (Must be a Mongo ObjectID.)")
   .trim();
 
 const validatePosition = body("position")
@@ -55,7 +56,7 @@ const validateProgress = [
     .notEmpty()
     .withMessage("each application status must have a date.")
     .bail()
-    .isISO8601()
+    .isISO8601({ strict: true })
     .withMessage(
       "each application status's date must be a valid ISO 8601 date.",
     ),
@@ -67,7 +68,7 @@ export const createApplicationValidator = [
   validateCompanyName,
   validatePosition,
   validateLink,
-  validateProgress,
+  ...validateProgress,
 ];
 
 export const getApplicationValidator = [validateId];

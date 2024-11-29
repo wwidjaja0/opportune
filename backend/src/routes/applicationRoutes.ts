@@ -4,6 +4,7 @@ import * as applicationValidator from "src/validators/applicationValidator";
 const applicationRouter = express.Router();
 
 applicationRouter.get("/", applicationController.getAllApplications);
+
 applicationRouter.post(
   "/",
   applicationValidator.createApplicationValidator,
