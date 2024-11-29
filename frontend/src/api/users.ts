@@ -5,23 +5,24 @@ import {
   GetAlumniQuery,
   Student,
   UpdateUserRequest,
+  User,
   UserJSON,
+  UserType,
 } from "../types/User";
-import { isAlumni, isStudent } from "../utils/checkType";
 import { APIResult, get, del, patch, post, handleAPIError } from "./requests";
 
-function parseUser(user: UserJSON): Student | Alumni {
-  if (isStudent(user)) {
-    return { ...user }; // Safely return as Student
-  } else if (isAlumni(user)) {
-    return { ...user }; // Safely return as Alumni
+function parseUser(user: UserJSON): User {
+  if (user.type === UserType.Student) {
+    return { ...user } as Student; // Safely return as Student
+  } else if (user.type === UserType.Alumni) {
+    return { ...user } as Alumni; // Safely return as Alumni
   }
   throw new Error("Invalid user type");
 }
 
 function parseAlumni(user: UserJSON): Alumni {
-  if (isAlumni(user)) {
-    return { ...user }; // Safely return as Alumni
+  if (user.type === UserType.Alumni) {
+    return { ...user } as Alumni; // Safely return as Alumni
   }
   throw new Error("User is not an Alumni");
 }
@@ -31,7 +32,7 @@ function parseAlumni(user: UserJSON): Alumni {
  *
  * @returns A list of users
  */
-export async function getUsers(): Promise<APIResult<(Student | Alumni)[]>> {
+export async function getUsers(): Promise<APIResult<User[]>> {
   try {
     const response = await get("/api/users");
     const json = (await response.json()) as UserJSON[];
@@ -48,9 +49,7 @@ export async function getUsers(): Promise<APIResult<(Student | Alumni)[]>> {
  * @param id The ID of the user to fetch
  * @returns The user object
  */
-export async function getUserById(
-  id: string,
-): Promise<APIResult<Student | Alumni>> {
+export async function getUserById(id: string): Promise<APIResult<User>> {
   try {
     const response = await get(`/api/users/${id}`);
     const json = (await response.json()) as UserJSON;
@@ -68,7 +67,7 @@ export async function getUserById(
  */
 export async function createUser(
   user: CreateUserRequest,
-): Promise<APIResult<Student | Alumni>> {
+): Promise<APIResult<User>> {
   try {
     const response = await post("/api/users", user);
     const json = (await response.json()) as UserJSON;
@@ -88,7 +87,7 @@ export async function createUser(
 export async function updateUser(
   id: string,
   user: UpdateUserRequest,
-): Promise<APIResult<Student | Alumni>> {
+): Promise<APIResult<User>> {
   try {
     const response = await patch(`/api/users/${id}`, user);
     const json = (await response.json()) as UserJSON;
