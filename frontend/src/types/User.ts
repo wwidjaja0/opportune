@@ -1,31 +1,39 @@
 import { Company } from "./Company";
 
-export type UserType = "student" | "alumni";
-export type ClassLevel =
-  | "freshmen"
-  | "sophomore"
-  | "junior"
-  | "senior"
-  | "other";
+export enum UserType {
+  Student = "STUDENT",
+  Alumni = "ALUMNI",
+}
 
-export interface User {
+export enum ClassLevel {
+  Freshmen = "FRESHMEN",
+  Sophomore = "SOPHOMORE",
+  Junior = "JUNIOR",
+  Senior = "SENIOR",
+  Other = "OTHER",
+}
+
+export interface BaseUser {
   _id: string;
   email: string;
   name: string;
-  type: UserType;
   linkedIn?: string;
   phoneNumber?: string;
 }
 
-export interface Student extends User {
+export interface Student extends BaseUser {
+  type: UserType.Student;
   major: string;
   classLevel: ClassLevel;
 }
 
-export interface Alumni extends User {
+export interface Alumni extends BaseUser {
+  type: UserType.Alumni;
   company: Company;
   shareProfile: boolean;
 }
+
+export type User = Student | Alumni;
 
 export interface UserJSON {
   _id: string;
