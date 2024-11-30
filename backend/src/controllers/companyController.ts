@@ -43,11 +43,6 @@ export const getCompanies = asyncHandler(async (req, res, next) => {
       .exec(),
   ]);
 
-  // Return 404 if no companies are found
-  if (companies.length === 0) {
-    return next(createHttpError(404, "No companies found that satisfy query."));
-  }
-
   res.status(200).json({
     page,
     perPage,
