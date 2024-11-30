@@ -1,5 +1,5 @@
 import { body, param, query } from "express-validator";
-import Company from "src/models/Company";
+import ApplicationStatus from "src/models/Application";
 
 const validateId = param("id")
   .isMongoId()
@@ -40,26 +40,27 @@ const validateLink = body("link")
   .withMessage("link must be a valid URL.")
   .trim();
 
-const validateProgress = [
-  body("progress")
+const validateProcess = [
+  body("process")
     .optional()
     .isArray()
-    .withMessage("progress must be an array of application statuses."),
-  body("progress.*.status")
-    .isString()
-    .withMessage("Each application status must be a string.")
-    .trim()
-    .notEmpty()
-    .withMessage("each application status must be a non-empty string."),
-  body("progress.*.date")
-    .optional()
+    .withMessage("process must be an array of application statuses."),
+  body("process.*.status")
+    .isIn(["APPLIED", "OA", "PHONE", "FINAL", "OFFER", "REJECTED"])
+    .withMessage(
+      "Status must be one of: APPLIED, OA, PHONE, FINAL, OFFER, REJECTED",
+    ),
+  body("process.*.date")
     .notEmpty()
     .withMessage("each application status must have a date.")
     .bail()
     .isISO8601({ strict: true })
-    .withMessage(
-      "each application status's date must be a valid ISO 8601 date.",
-    ),
+    .withMessage("each application status date must be a valid ISO 8601 date."),
+  body("process.*.note")
+    .optional()
+    .isString()
+    .withMessage("note must be a string.")
+    .trim(),
 ];
 
 export const createApplicationValidator = [
@@ -68,7 +69,7 @@ export const createApplicationValidator = [
   validateCompanyName,
   validatePosition,
   validateLink,
-  ...validateProgress,
+  ...validateProcess,
 ];
 
 export const getApplicationValidator = [validateId];
@@ -80,7 +81,7 @@ export const updateApplicationValidator = [
   validateCompanyName.optional(),
   validatePosition.optional(),
   validateLink.optional(),
-  ...validateProgress,
+  ...validateProcess,
 ];
 
 export const deleteApplicationValidator = [validateId];

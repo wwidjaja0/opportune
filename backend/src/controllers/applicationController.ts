@@ -1,4 +1,5 @@
 import Application from "src/models/Application";
+import { ApplicationStatus } from "src/models/Application";
 import Company from "src/models/Company";
 import { matchedData, validationResult } from "express-validator";
 import validationErrorParser from "src/util/validationErrorParser";
@@ -13,7 +14,10 @@ interface ApplicationCreate {
   companyName?: string;
   position: string;
   link?: string;
-  progress?: string;
+  process?: Array<{
+    status: ApplicationStatus;
+    date: string | Date;
+  }>;
 }
 interface ApplicationUpdate extends Partial<ApplicationCreate> {}
 
@@ -160,10 +164,7 @@ export const deleteApplicationByID = asyncHandler(async (req, res, next) => {
     return next(createHttpError(404, "Application not found."));
   }
 
-  res.status(200).json({
-    message: "Application deleted successfully.",
-    application,
-  });
+  res.status(200).json(application);
 });
 
 //  @desc Get applications by user ID

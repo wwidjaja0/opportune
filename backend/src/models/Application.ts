@@ -1,13 +1,27 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
+export enum ApplicationStatus {
+  APPLIED = "APPLIED",
+  OA = "OA",
+  PHONE = "PHONE",
+  FINAL = "FINAL",
+  OFFER = "OFFER",
+  REJECTED = "REJECTED",
+}
+
 const applicationStatusSchema = new Schema({
   status: {
     type: String,
+    enum: Object.values(ApplicationStatus),
     required: true,
   },
   date: {
     type: Date,
     required: true,
+  },
+  note: {
+    type: String,
+    required: false,
   },
 });
 
@@ -33,7 +47,7 @@ const applicationSchema = new Schema(
       type: String,
       required: false,
     },
-    progress: {
+    process: {
       type: [applicationStatusSchema],
       default: [],
     },
