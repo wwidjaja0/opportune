@@ -17,6 +17,7 @@ interface ApplicationCreate {
   process?: Array<{
     status: ApplicationStatus;
     date: string | Date;
+    note?: string;
   }>;
 }
 interface ApplicationUpdate extends Partial<ApplicationCreate> {}
