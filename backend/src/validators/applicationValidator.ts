@@ -1,5 +1,4 @@
 import { body, param, query } from "express-validator";
-import ApplicationStatus from "src/models/Application";
 
 const validateId = param("id")
   .isMongoId()

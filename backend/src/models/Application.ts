@@ -1,6 +1,7 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
-export enum ApplicationStatus {
+/* eslint-disable no-unused-vars */
+export enum Status {
   APPLIED = "APPLIED",
   OA = "OA",
   PHONE = "PHONE",
@@ -12,7 +13,7 @@ export enum ApplicationStatus {
 const applicationStatusSchema = new Schema({
   status: {
     type: String,
-    enum: Object.values(ApplicationStatus),
+    enum: Object.values(Status),
     required: true,
   },
   date: {

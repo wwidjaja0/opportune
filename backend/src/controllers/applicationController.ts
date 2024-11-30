@@ -1,6 +1,5 @@
 import Application from "src/models/Application";
-import { ApplicationStatus } from "src/models/Application";
-import Company from "src/models/Company";
+import { Status } from "src/models/Application";
 import { matchedData, validationResult } from "express-validator";
 import validationErrorParser from "src/util/validationErrorParser";
 import asyncHandler from "express-async-handler";
@@ -15,7 +14,7 @@ interface ApplicationCreate {
   position: string;
   link?: string;
   process?: Array<{
-    status: ApplicationStatus;
+    status: Status;
     date: string | Date;
     note?: string;
   }>;
@@ -27,7 +26,7 @@ interface ApplicationUpdate extends Partial<ApplicationCreate> {}
 // @access Private
 //
 // @returns {Application[]} 200 - Array of applications
-export const getAllApplications = asyncHandler(async (req, res, next) => {
+export const getAllApplications = asyncHandler(async (req, res, _) => {
   // Retrieve all applications from the database
   const applications = await Application.find().lean().exec();
 
