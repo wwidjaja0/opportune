@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import userRouter from "src/routes/userRoutes";
 import companyRouter from "src/routes/companyRoutes";
+import applicationRouter from "src/routes/applicationRoutes";
 import errorHandler from "src/middlewares/errorHandler";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 );
 
 app.use("/api/users", userRouter);
+app.use("/api/applications/applied", applicationRouter);
 app.use("/api/companies", companyRouter);
 
 /**

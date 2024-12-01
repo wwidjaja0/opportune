@@ -4,10 +4,31 @@ import * as applicationValidator from "src/validators/applicationValidator";
 const applicationRouter = express.Router();
 
 applicationRouter.get("/", applicationController.getAllApplications);
-applicationRouter.post("/", applicationController.createApplication);
-applicationRouter.get("/:id", applicationController.getApplicationByID);
-applicationRouter.patch("/:id", applicationController.updateApplicationByID);
-applicationRouter.delete("/:id", applicationController.deleteApplicationByID);
+
+applicationRouter.post(
+  "/",
+  applicationValidator.createApplicationValidator,
+  applicationController.createApplication,
+);
+
+applicationRouter.get(
+  "/:id",
+  applicationValidator.getApplicationValidator,
+  applicationController.getApplicationByID,
+);
+
+applicationRouter.patch(
+  "/:id",
+  applicationValidator.updateApplicationValidator,
+  applicationController.updateApplicationByID,
+);
+
+applicationRouter.delete(
+  "/:id",
+  applicationValidator.deleteApplicationValidator,
+  applicationController.deleteApplicationByID,
+);
+
 applicationRouter.get(
   "/user/:id",
   applicationController.getApplicationsByUserID,

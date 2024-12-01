@@ -1,15 +1,36 @@
 import Application from "src/models/Application";
+import { Status } from "src/models/Application";
+import { matchedData, validationResult } from "express-validator";
+import validationErrorParser from "src/util/validationErrorParser";
 import asyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
+
+// Interface for creating/updating an application
+// @interface CreateApplicationRequest
+interface ApplicationCreate {
+  userId: string;
+  companyId: string;
+  companyName?: string;
+  position: string;
+  link?: string;
+  process?: Array<{
+    status: Status;
+    date: string | Date;
+    note?: string;
+  }>;
+}
+interface ApplicationUpdate extends Partial<ApplicationCreate> {}
 
 // @desc Retrieve all applications
 // @route GET /api/applications/applied
 // @access Private
 //
 // @returns {Application[]} 200 - Array of applications
-// @throws {403} - If no application is found
-export const getAllApplications = asyncHandler(async (req, res, next) => {
-  const applications = await Application.find({});
+export const getAllApplications = asyncHandler(async (req, res, _) => {
+  // Retrieve all applications from the database
+  const applications = await Application.find().lean().exec();
+
+  res.status(200).json(applications);
 });
 
 //  @desc Create a new application
@@ -20,7 +41,32 @@ export const getAllApplications = asyncHandler(async (req, res, next) => {
 //  @returns {Application} 201 - Created application
 //  @throws {400} - If required fields are missing
 export const createApplication = asyncHandler(async (req, res, next) => {
-  const { userId, companyId, companyName, position, link, progress } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
+  }
+
+  // Extract validated data from the request body
+  const applicationData = matchedData(req) as ApplicationCreate;
+
+  // Check if an application with the same userId, companyId, and position already exists
+  const existingApplication = await Application.findOne({
+    userId: applicationData.userId,
+    companyId: applicationData.companyId,
+    position: applicationData.position,
+  })
+    .lean()
+    .exec();
+
+  if (existingApplication) {
+    return next(createHttpError(409, "Application already exists"));
+  }
+
+  // Create a new application with the validated data
+  const newApplication = new Application(applicationData);
+  await newApplication.save();
+
+  res.status(201).json(newApplication);
 });
 
 //  @desc Get application by ID
@@ -32,7 +78,22 @@ export const createApplication = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const getApplicationByID = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
+  }
+
+  // Extract the validated 'id' from request parameters
+  const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
+
+  // Find the application by ID
+  const application = await Application.findById(id).lean().exec();
+
+  if (!application) {
+    return next(createHttpError(404, "Application not found."));
+  }
+
+  res.status(200).json(application);
 });
 
 //  @desc Update application by ID
@@ -45,8 +106,38 @@ export const getApplicationByID = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const updateApplicationByID = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const { userId, companyId, companyName, position, link, progress } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
+  }
+
+  // Extract the validated 'id' from request parameters
+  const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
+
+  // Extract the validated fields to update from request body
+  const validatedData = matchedData(req, {
+    locations: ["body"],
+  }) as ApplicationUpdate;
+
+  if (Object.keys(validatedData).length === 0) {
+    // If no fields are provided to update, return a 400 Bad Request
+    return next(
+      createHttpError(400, "At least one field is required to update."),
+    );
+  }
+
+  // Update the application with the provided data
+  const updatedApplication = await Application.findByIdAndUpdate(
+    id,
+    { $set: validatedData },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedApplication) {
+    return next(createHttpError(404, "Application not found."));
+  }
+
+  res.status(200).json(updatedApplication);
 });
 
 //  @desc Delete application by ID
@@ -58,7 +149,22 @@ export const updateApplicationByID = asyncHandler(async (req, res, next) => {
 //  @throws {404} - If application not found
 //  @throws {400} - If ID is invalid
 export const deleteApplicationByID = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createHttpError(400, validationErrorParser(errors)));
+  }
+
+  // Extract the validated 'id' from request parameters
+  const { id } = matchedData(req, { locations: ["params"] }) as { id: string };
+
+  // Find and delete the application by ID
+  const application = await Application.findByIdAndDelete(id).lean().exec();
+
+  if (!application) {
+    return next(createHttpError(404, "Application not found."));
+  }
+
+  res.status(200).json(application);
 });
 
 //  @desc Get applications by user ID
